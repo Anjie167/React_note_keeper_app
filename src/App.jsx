@@ -3,14 +3,43 @@ import './App.css';
 import Note from './components/note';
 import Header from "./components/header";
 import Footer from "./components/footer";
-import Notes from "./components/notes";
+import CreateInput from "./components/input";
+import { useState } from 'react';
 
 
 function App() {
+  const [notes, setNotes] = useState([]);
+
+
+  function addNote(newNote) {
+    setNotes(prevNotes => {
+      return [...prevNotes, newNote];
+    });
+  }
+
+  function deleteNote(id) {
+    setNotes(prevNotes => {
+      prevNotes.filter((noteItem, index)=>{
+        return index !== id;
+      });
+    });
+  }
+
+
   return (
     <div>
       <Header />
-      {Notes.map((props) => (<Note key={props.key} title={props.title} content={props.content} />))}
+      <CreateInput onAdd={addNote} />
+      {notes?.map((noteItem, index) => {
+        return (<Note 
+        key={index}
+          id={index}
+          title={noteItem.title} 
+          content={noteItem.content} 
+          onDelete={deleteNote} 
+          />
+          );
+      })}
       <Footer />
     </div>
   );
